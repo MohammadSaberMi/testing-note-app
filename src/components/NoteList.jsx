@@ -1,20 +1,20 @@
-import { useNotes, useNotesDispatch } from "../context/NotesContext";
+import { useNotes, useNotesDispatch } from '../context/NotesContext';
 
 function NoteList({ sortBy }) {
   const notes = useNotes();
 
   let sortedNotes = notes;
-  if (sortBy === "earliest")
+  if (sortBy === 'earliest')
     sortedNotes = [...notes].sort(
       (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
     ); // a -b  => a > b ? 1 : -1
 
-  if (sortBy === "latest")
+  if (sortBy === 'latest')
     sortedNotes = [...notes].sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     ); // b -a  => a > b ? -1 : 1
 
-  if (sortBy === "completed")
+  if (sortBy === 'completed')
     sortedNotes = [...notes].sort(
       (a, b) => Number(a.completed) - Number(b.completed)
     );
@@ -34,13 +34,16 @@ function NoteItem({ note }) {
   const dispatch = useNotesDispatch();
 
   const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   };
 
   return (
-    <div className={`note-item ${note.completed ? "completed" : ""}`}>
+    <div
+      className={`note-item ${note.completed ? 'completed' : ''}`}
+      data-testid="note-item"
+    >
       <div className="note-item__header">
         <div>
           <p className="title">{note.title}</p>
@@ -48,7 +51,7 @@ function NoteItem({ note }) {
         </div>
         <div className="actions">
           <button
-            onClick={() => dispatch({ type: "delete", payload: note.id })}
+            onClick={() => dispatch({ type: 'delete', payload: note.id })}
           >
             ❌
           </button>
@@ -60,13 +63,13 @@ function NoteItem({ note }) {
             checked={note.completed}
             onChange={(e) => {
               const noteId = Number(e.target.value);
-              dispatch({ type: "complete", payload: noteId });
+              dispatch({ type: 'complete', payload: noteId });
             }}
           />
         </div>
       </div>
       <p className="note-item__footer">
-        {new Date(note.createdAt).toLocaleDateString("en-US", options)}
+        {new Date(note.createdAt).toLocaleDateString('en-US', options)}
       </p>
     </div>
   );
